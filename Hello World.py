@@ -4,7 +4,7 @@ from pygame.locals import USEREVENT
 import random
 
 # Define the file path as a variable
-audio_file_path = r"C:\Users\kmanukya\Downloads\The-Weeknd-Blinding-Lights.mp3"
+audio_file_path = r"c:\Users\vmanukyan135\Downloads\The-Weeknd-Blinding-Lights.mp3"
 
 # Initialize the Pygame mixer and load the audio
 pygame.mixer.init()
@@ -32,6 +32,9 @@ def main():
 
     # Set red color
     red = (255, 0, 0)
+
+    #Set Middle Lines White
+    white =  (255,255,255)
 
     # Pong Ball Dimensions
     ball_width = 25
@@ -113,9 +116,46 @@ def main():
         # Boundary checks for the top and bottom of the screen
         if ball_y < 0 or ball_y + ball_height > height:
             ball_velocity_y = -ball_velocity_y
+ 
+        # Dimensions of the middle line
+        middle_line_width = 5  # Adjust the width as needed
+        middle_line_height = height  # Make it as tall as the screen
+
+        #Position of the middle line
+        middle_line_x = width // 2 - middle_line_width // 2
+        middle_line_y = 0
+
+        # Create the middle line (a rectangular surface)
+        middle_line = pygame.Surface((middle_line_width, middle_line_height))
+        middle_line.fill(white)  # Fill the middle line with White
+
+        # Draw the middle line on the screen in white
+        screen.blit(middle_line, (middle_line_x, middle_line_y))
 
         # Clear the screen with the black background
         screen.fill(background_color)
+
+        # Draw the middle line on the screen in white
+        screen.blit(middle_line, (middle_line_x, middle_line_y))
+
+        # initialize font; must be called after 'pygame.init()' to avoid 'Font not Initialized' error
+        myfont = pygame.font.SysFont("Times New Roman Bold", 100)
+
+        # render text
+        label = myfont.render("SCORE!", 1, (255, 255, 255))
+        screen.blit(label, (825, 50))
+
+        # Draw the ball on the screen in red
+        screen.blit(ball, (ball_x, ball_y))
+
+        # Draw Slide A on the screen in red
+        screen.blit(Slide, (Slide_x, Slide_y))
+
+        # Draw Slide B on the screen in red
+        screen.blit(Slide2, (Slide2_x, Slide2_y))
+
+        # Update the display
+        pygame.display.flip()
 
         # Draw the ball on the screen in red
         screen.blit(ball, (ball_x, ball_y))
