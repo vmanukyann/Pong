@@ -19,6 +19,9 @@ def play_audio():
 def main():
     pygame.init()
 
+def main():
+    pygame.init()
+
     # Get the screen dimensions
     screen_info = pygame.display.Info()
     width, height = screen_info.current_w, screen_info.current_h
@@ -48,8 +51,8 @@ def main():
     ball_x, ball_y = width // 2, height // 2  # Start in the center of the screen
 
     # Initial velocity for the ball
-    ball_velocity_x = 1  # Slower movement (you can adjust this value)
-    ball_velocity_y = 1  # Slower movement (you can adjust this value)
+    ball_velocity_x = 2.5  # Speed here for ball
+    ball_velocity_y = 2.5  # Speed here for ball
 
     # Dimensions of Slide A
     Slide1_width = 30
@@ -83,18 +86,19 @@ def main():
                 # The audio has ended; restart it
                 pygame.mixer.music.play()
 
+
         # Event handling for motion of Slide A (keyboard input)
         keys = pygame.key.get_pressed()
         if keys[pygame.K_w] and Slide_y > 0:  # Slide A goes up
-            Slide_y -= 1
+            Slide_y -= 2
         if keys[pygame.K_s] and Slide_y + Slide1_height < height:  # Slide A goes down
-            Slide_y += 1
+            Slide_y += 2
 
         # Event handling for motion of Slide B (keyboard input)
         if keys[pygame.K_UP] and Slide2_y > 0:  # Slide B goes up
-            Slide2_y -= 1
+            Slide2_y -= 2
         if keys[pygame.K_DOWN] and Slide2_y + Slide2_height < height:  # Slide B goes down
-            Slide2_y += 1
+            Slide2_y += 2
 
         # Update the ball's position based on its velocity
         ball_x += ball_velocity_x
@@ -102,18 +106,18 @@ def main():
 
         # Check if the ball goes out of the screen on the left or right
         if ball_x < 0 or ball_x + ball_width > width:
-            # Reset the ball's position to the center
+    # Reset the ball's position to the center
             ball_x = width // 2
             ball_y = height // 2
-            # Randomly choose a new direction for the ball
-            ball_velocity_x = random.choice([-1, 1])  # Adjust for slower or faster movement
-            ball_velocity_y = random.choice([-1, 1])  # Adjust for slower or faster movement
+    # Maintain the increased speed for the ball even when it goes out
+            ball_velocity_x = abs(ball_velocity_x) * random.choice([-1, 1])
+            ball_velocity_y = abs(ball_velocity_y) * random.choice([-1, 1])
         elif (ball_x <= Slide_x + Slide1_width and Slide_y <= ball_y <= Slide_y + Slide1_height) or \
-             (ball_x + ball_width >= Slide2_x and Slide2_y <= ball_y <= Slide2_y + Slide2_height):
-            # Ball hits a slider, bounce it in the opposite direction
+            (ball_x + ball_width >= Slide2_x and Slide2_y <= ball_y <= Slide2_y + Slide2_height):
+    # Ball hits a slider, bounce it in the opposite direction
             ball_velocity_x = -ball_velocity_x
 
-        # Boundary checks for the top and bottom of the screen
+# Boundary checks for the top and bottom of the screen
         if ball_y < 0 or ball_y + ball_height > height:
             ball_velocity_y = -ball_velocity_y
  
@@ -142,8 +146,8 @@ def main():
         myfont = pygame.font.SysFont("Times New Roman Bold", 100)
 
         # render text
-        label = myfont.render("SCORE!", 1, (255, 255, 255))
-        screen.blit(label, (825, 50))
+        label = myfont.render("SCORE", 1, (255, 255, 255))
+        screen.blit(label, (840, 50))
 
         # Draw the ball on the screen in red
         screen.blit(ball, (ball_x, ball_y))
