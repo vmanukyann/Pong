@@ -4,7 +4,7 @@ from pygame.locals import USEREVENT
 import random
 
 # Define the file path as a variable
-audio_file_path = r"c:\Users\vmanukyan135\Downloads\The-Weeknd-Blinding-Lights.mp3"
+audio_file_path = r"c:\Users\kmanukya\Downloads\The-Weeknd-Blinding-Lights.mp3"
 
 # Initialize the Pygame mixer and load the audio
 pygame.mixer.init()
@@ -15,9 +15,6 @@ audio_end_event = pygame.event.Event(USEREVENT + 1)
 
 def play_audio():
     pygame.mixer.music.play(-1)  # Play the audio in an infinite loop
-
-def main():
-    pygame.init()
 
 def main():
     pygame.init()
@@ -36,8 +33,12 @@ def main():
     # Set red color
     red = (255, 0, 0)
 
-    #Set Middle Lines White
+    # Set Middle Lines White
     white =  (255,255,255)
+
+    # Set the initial scores
+    score_a = 0
+    score_b = 0
 
     # Pong Ball Dimensions
     ball_width = 25
@@ -51,8 +52,8 @@ def main():
     ball_x, ball_y = width // 2, height // 2  # Start in the center of the screen
 
     # Initial velocity for the ball
-    ball_velocity_x = 2.5  # Speed here for ball
-    ball_velocity_y = 2.5  # Speed here for ball
+    ball_velocity_x = 1.5  # Speed here for ball
+    ball_velocity_y = 1.5  # Speed here for ball
 
     # Dimensions of Slide A
     Slide1_width = 30
@@ -76,6 +77,8 @@ def main():
     # Initial position of Slide B for motion
     Slide2_x, Slide2_y = width - 20 - Slide2_width, (height - Slide2_height) // 2
 
+
+
     running = True  # Initialize the running variable for the game loop
 
     while running:
@@ -86,6 +89,39 @@ def main():
                 # The audio has ended; restart it
                 pygame.mixer.music.play()
 
+
+        # Event handling for motion of Slide A (keyboard input)
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_w] and Slide_y > 0:  # Slide A goes up
+            Slide_y -= 2
+        if keys[pygame.K_s] and Slide_y + Slide1_height < height:  # Slide A goes down
+            Slide_y += 2
+
+        # Event handling for motion of Slide B (keyboard input)
+        if keys[pygame.K_UP] and Slide2_y > 0:  # Slide B goes up
+            Slide2_y -= 2
+        if keys[pygame.K_DOWN] and Slide2_y + Slide2_height < height:  # Slide B goes down
+            Slide2_y += 2
+
+        # Update the ball's position based on its velocity
+        ball_x += ball_velocity_x
+        ball_y += ball_velocity_y
+
+        # Check if the ball goes out of the screen on the left
+        if ball_x < 0:
+            # Reset the ball's position to the center
+            ball_x = width // 2
+            ball_y = height // 2
+            # Increase the score for Slide B
+            score_b += 1
+
+        # Check if the ball goes out of the screen on the right
+        if ball_x + ball_width > width:
+            # Reset the ball's position to the center
+            ball_x = width // 2
+            ball_y = height // 2
+            # Increase the score for Slide A
+            score_a += 1
 
         # Event handling for motion of Slide A (keyboard input)
         keys = pygame.key.get_pressed()
@@ -147,7 +183,7 @@ def main():
 
         # render text
         label = myfont.render("SCORE", 1, (255, 255, 255))
-        screen.blit(label, (840, 50))
+        screen.blit(label, (520, 50))
 
         # Draw the ball on the screen in red
         screen.blit(ball, (ball_x, ball_y))
@@ -160,6 +196,12 @@ def main():
 
         # Update the display
         pygame.display.flip()
+
+        score_a_label = myfont.render(str(score_a), 1, (255, 255, 255))
+        screen.blit(score_a_label, (520, 100))
+
+        score_b_label = myfont.render(str(score_b), 1, (255, 255, 255))
+        screen.blit(score_b_label, (720, 100))
 
         # Draw the ball on the screen in red
         screen.blit(ball, (ball_x, ball_y))
@@ -180,4 +222,3 @@ if __name__ == "__main__":
     main()
 
     # Quit Pygame
-    pygame.quit()
